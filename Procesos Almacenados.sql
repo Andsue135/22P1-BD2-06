@@ -22,16 +22,16 @@ Begin
 	set v_ape		= p_apellidos;
 		
     update bd_sample.tbl_subscriptores
-		set id_subscriptor 		= p_id_subscriptor;
-        set codigo_subscriptor 	= p_codigo_subscriptor;
-        set nombres 			= p_nombres;
-		set apellidos 			= p_apellidos;
+		set p_id_subscriptor = id_subscriptor;
+        set p_codigo_subscriptor = codigo_subscriptor;
+        set p_nombres = nombres;
+		set p_apellidos = apellidos; 
     
 	commit;
 End;
 
-/* Proceso No. 2: Guardar Producto */
 
+/* Proceso No. 2: Guardar Producto */
 Drop Procedure if Exists SP_Guardar_Producto;
 
 Delimiter //
@@ -57,15 +57,19 @@ Begin
 	set v_precio_costo		= p_precio_costo;
     set v_precio_venta 		= p_precio_venta;
 		
+	set p_precio_venta = (p_precio_costo)*1.25;
+        
     update bd_sample.tbl_productos
-		set id_producto = p_id_producto;
-        set nombre = p_nombre;
-        set descripcion = p_descripcion;
-        set precio_costo = p_precio_costo;
-        set precio_venta = (p_precio_costo)*1.25;
+		set p_id_producto = id_producto;
+        set p_nombre = nombre;
+        set p_descripcion = descripcion;
+        set p_precio_costo = precio_costo;
+        set p_precio_venta = precio_venta; 
 		
 	commit;
 End;
+
+//
 
 /* Proceso No. 3: Guardar Factura */
 
@@ -115,4 +119,4 @@ Begin
     
 	commit;
 End;
-
+//
