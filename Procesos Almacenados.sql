@@ -75,7 +75,7 @@ Delimiter //
 
 
 
-Create Procedure SP_Guardar_Producto(
+Create Procedure SP_Guardar_Factura(
 	in p_id_factura 	int,
     in p_fecha_emision	datetime,
     in p_id_subscriptor	int,
