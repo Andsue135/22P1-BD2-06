@@ -30,7 +30,6 @@ Begin
 	commit;
 End;
 
-
 /* Proceso No. 2: Guardar Producto */
 Drop Procedure if Exists SP_Guardar_Producto;
 
@@ -68,8 +67,6 @@ Begin
 		
 	commit;
 End;
-
-//
 
 /* Proceso No. 3: Guardar Factura */
 
