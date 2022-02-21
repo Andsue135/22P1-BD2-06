@@ -1,8 +1,6 @@
 /* Proceso No. 1: Guardar Subscriptor */
 Drop Procedure if Exists SP_Guardar_Subscriptor;
-
 Delimiter //
-
 Create Procedure SP_Guardar_Subscriptor(
 	in p_id_subscriptor 	int, 
     in p_codigo_subscriptor int,
@@ -32,9 +30,7 @@ End;
 
 /* Proceso No. 2: Guardar Producto */
 Drop Procedure if Exists SP_Guardar_Producto;
-
 Delimiter //
-
 Create Procedure SP_Guardar_Producto(
 	in p_id_producto 	int,
     in p_nombre			varchar(45),
@@ -71,11 +67,7 @@ End;
 /* Proceso No. 3: Guardar Factura */
 
 Drop Procedure if Exists SP_Guardar_Factura;
-
 Delimiter //
-
-
-
 Create Procedure SP_Guardar_Factura(
 	in p_id_factura 	int,
     in p_fecha_emision	datetime,
@@ -96,24 +88,21 @@ Begin
     declare v_subtotal			decimal(12,2);
     declare v_totapagar			decimal(12,2);
 
+	
 	set v_id_factura 		= p_id_factura;
 	set v_fecha_emision		= curdate();
 	set v_id_subscriptor	= p_id_subscriptor;
-	set v_numero_items 		= p_numero_items;
-    set v_isv_total 		= (p_precio_venta * p_numero_items)*0.15; 
-    set v_subtotal			= p_precio_venta * p_numero_items;
-    set v_totapagar 		= (p_precio_venta * p_numero_items)*1.15;
-		
-	
+	set v_numero_items 		= null;
+    set v_isv_total 		= null;
+    set v_subtotal			= null;
+    set v_totapagar 		= null;
+
         
 	insert into bd_sample.tbl_facturas ( 
 		id_factura, fecha_emision, id_subscriptor, numero_items, isv_total, subtotal, totapagar  
 	) values (
 		v_id_factura, v_fecha_emision, v_id_subscriptor, v_numero_items, v_isv_total, v_subtotal, v_totapagar 
 	);
-        
-    
-    
+
 	commit;
 End;
-//
