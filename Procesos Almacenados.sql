@@ -109,3 +109,18 @@ Begin
 	commit;
 End;
 
+/* Proceso No. 4: Procesar Factura */
+
+Drop Procedure if Exists SP_Procesar_Factura;
+Delimiter //
+Create Procedure SP_Procesar_Factura(
+	
+    )
+    
+Begin
+/* Crear Proceso de Facturación */
+
+
+
+/* Update Facturas */
+End;
