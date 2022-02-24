@@ -75,7 +75,8 @@ Create Procedure SP_Guardar_Factura(
     in p_numero_items 	int,
     in p_isv_total		decimal(12,2),
     in p_subtotal		decimal(12,2),
-    in p_totapagar		decimal(12,2)
+    in p_totapagar		decimal(12,2),
+    in p_precio_costo 	decimal(12,2)
 )
 
 Begin
@@ -87,15 +88,16 @@ Begin
     declare v_isv_total			decimal(12,2);
     declare v_subtotal			decimal(12,2);
     declare v_totapagar			decimal(12,2);
+    declare v_precio_costo 		decimal(12,2);
 
 	
 	set v_id_factura 		= p_id_factura;
 	set v_fecha_emision		= curdate();
 	set v_id_subscriptor	= p_id_subscriptor;
-	set v_numero_items 		= null;
-    set v_isv_total 		= null;
-    set v_subtotal			= null;
-    set v_totapagar 		= null;
+	set v_numero_items 		= p_numero_items;
+    set v_isv_total 		= (p_numero_items*p_precio_costo)*0.15;
+    set v_subtotal			= (p_numero_items*p_precio_costo);
+    set v_totapagar 		= (p_numero_items*p_precio_costo)*1.15;
 
         
 	insert into bd_sample.tbl_facturas ( 
