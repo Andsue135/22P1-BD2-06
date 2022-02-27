@@ -41,13 +41,24 @@ Drop Procedure if Exists SP_Guardar_Producto;
 /* Alter Table tbl_productos
 Add Column Porcentaje decimal(12,2) after precio_costo */
 
+/* Drop Table if Exists `tbl_productos_hist`;
+
+CREATE TABLE `tbl_productos_hist` (
+  `id_hist` int NOT NULL DEFAULT '0',
+  `id_producto` int NOT NULL,
+  `fecha_insercion` datetime DEFAULT NULL
+ 
+) ; */
+
 Delimiter //
 Create Procedure SP_Guardar_Producto(
 	in p_id_producto 	int,
     in p_nombre			varchar(45),
     in p_descripcion	varchar(45),
     in p_precio_costo 	decimal(12,2),
-    out p_precio_venta	decimal(12,2)
+    out p_precio_venta	decimal(12,2),
+    in p_id_hist 		int,
+    in p_fecha_insercion datetime
 )
 
 Begin
@@ -56,12 +67,16 @@ Begin
 	declare v_desc_prod varchar(45) ;
 	declare v_precio_costo decimal(12,2);
     declare v_precio_venta decimal(12,2);
+    declare v_id_hist int;
+    declare v_fecha_insercion datetime;
 
 	set v_id_producto 		= p_id_producto;
 	set v_nom_prod			= p_nombre; 
 	set v_desc_prod			= p_descripcion;
 	set v_precio_costo		= p_precio_costo;
     set v_precio_venta 		= p_precio_venta;
+    set v_id_hist			= p_id_hist;
+    set v_fecha_insercion	= p_fecha_insercion;
 		
 	set p_precio_venta = (p_precio_costo)*1.25;
         
@@ -73,7 +88,11 @@ Begin
 			else set Porcentaje ='[Indefinido]';
 		end case;
 	else
-    
+		insert into bd_sample.tbl_productos_hist ( 
+			id_hist, id_producto, fecha_insercion  
+		) values (
+			v_id_hist, v_id_producto, v_fecha_insercion 
+		);
     end if;
     
     update bd_sample.tbl_productos
@@ -83,6 +102,11 @@ Begin
         set v_precio_costo = precio_costo;
         set v_precio_venta = precio_venta; 
 		
+	update bd_sample.tbl_productos_hist
+		set v_id_hist = id_hist;
+        set v_id_producto = id_producto;
+        set v_fecha_insercion = fecha_insercion;
+        
 	commit;
 End;
 
