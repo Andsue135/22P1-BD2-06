@@ -130,11 +130,17 @@ Begin
 	declare v_id_factura 		int;
     declare v_fecha_emision		datetime;
     declare v_id_subscriptor 	int;
-    declare v_numero_items 		int;
+	declare v_numero_items 		int;
     declare v_isv_total			decimal(12,2);
     declare v_subtotal			decimal(12,2);
     declare v_totapagar			decimal(12,2);
     
+    declare v_id_producto 		int;
+    declare v_isv_prod 			decimal(12,2) default 0;
+    declare v_total_prod   		decimal(12,2) default 0;
+	declare v_subtotal_prod     decimal(12,2) default 0;
+	declare v_precio_venta 		decimal(12,2) default 0;
+    declare v_cantidad			int;
 	
 	set v_id_factura 		= p_id_factura;
 	set v_fecha_emision		= p_fecha_emision;
@@ -143,18 +149,25 @@ Begin
     set v_isv_total 		= p_isv_total;
     set v_subtotal			= p_subtotal;
     set v_totapagar 		= p_totapagar;
+    
 
         
 	if id_factura = v_id_factura then
-		 update bd_sample.tbl_facturas 
-				set id_factura 			= v_id_factura;
-				set fecha_emision		= v_fecha_emision;
-				set id_subscriptor		= v_id_subscriptor;
-				set numero_items 		= v_numero_items;
-				set isv_total 			= v_isv_total;
-				set subtotal			= v_subtotal;
-				set totapagar 			= v_totapagar;
-			where id_factura = v_id_factura;
+		select precio_venta into v_precio_venta  
+		from bd_sample.tbl_productos 
+		where id_producto = v_id_producto;
+    
+		set v_subtotal_prod = (v_precio_venta*v_cantidad);
+		set v_isv_prod		= (v_subtotal_prod*0.15);
+		set v_total_prod	= v_subtotal_prod + v_isv_producto; 
+    
+		 update  bd_sample.tbl_facturas Set 
+			numero_items 	= 	numero_items + v_cantidad,
+			fecha_emision 	=	now(),
+			isv_total   	=  	isv_total + v_isv,
+			subtotal    	=   subtotal  + v_subtotal,
+			totapagar		=   totapagar + v_total
+		where id_factura = v_id_factura; 
 	else
 		insert into bd_sample.tbl_facturas ( 
 				id_factura, fecha_emision, id_subscriptor, numero_items, isv_total, subtotal, totapagar  
@@ -180,40 +193,28 @@ Begin
     declare v_id_factura 		int;
     declare v_id_producto		int;
     declare v_cantidad			int;
-	declare v_numero_items 	    int;
-	declare v_isv      			decimal(12,2) default 0;
-	declare v_total   			decimal(12,2) default 0;
-	declare v_subtotal     		decimal(12,2) default 0;
-	declare v_precio_venta      decimal(12,2) default 0;
+    
+	declare v_id_producto 		int;
+    declare v_isv_prod 			decimal(12,2) default 0;
+    declare v_total_prod   		decimal(12,2) default 0;
+	declare v_subtotal_prod     decimal(12,2) default 0;
+	declare v_precio_venta 		decimal(12,2) default 0;
+    declare v_cantidad			int;
 
     set v_id_factura 		= p_id_factura;
     set v_id_producto       = p_id_producto;
     set v_cantidad          = p_cantidad;
-	
-    select precio_venta into v_precio_venta  
-	from bd_sample.tbl_productos 
-	where id_producto = v_id_producto; 
 
-/* Crear la factura */
+    if id_producto = v_id_producto then
+		Call SP_Guardar_Factura();
+    else
+		insert into bd_sample.tbl_items_factura(
+			id_factura, id_producto, cantidad
+		) values ( 
+			v_id_factura, v_id_producto, v_cantidad
+		);
 
-    insert into bd_sample.tbl_items_factura(
-		id_factura, id_producto, cantidad
-    ) values ( 
-		v_id_factura, v_id_producto, v_cantidad
-    );
-
-	set v_subtotal	= (v_precio_venta * v_cantidad);
-    set v_isv		= (v_subtotal * 0.15);
-    set v_total	= v_subtotal + v_isv; 
+		end if;
     
-/* Update Facturas */
-	update  bd_sample.tbl_facturas Set 
-		numero_items 	= 	numero_items + v_cantidad,
-		fecha_emision 	=	now(),
-		isv_total   	=  	isv_total + v_isv,
-		subtotal    	=   subtotal  + v_subtotal,
-		totapagar		=   totapagar + v_total
-	where id_factura = v_id_factura; 
-	
 	commit; 
 End; 
