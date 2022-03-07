@@ -31,47 +31,38 @@ BEGIN
         
 END;
 
-Drop Procedure if Exists SP_Registro_Tickets;
+Drop Procedure if exists SP_Registro_Tickets;
 Create Procedure SP_Registro_Tickets(
 	in p_fecha_inicio datetime
 )
 Begin
-	declare i datetime;
-    
-	declare v_id_ticket int default 0;
+	
     declare v_id_factura int;
     declare v_Randomizer int;
     declare v_fecha_inicio datetime;
-    declare v_fecha_final datetime;
-    declare v_orden int;
+    declare v_orden int default 0;
+    declare v_orden_Max int;
     
-    set v_fecha_inicio = p_fecha_incio;
-    set v_fecha_final = now();
+    set v_fecha_inicio = p_fecha_inicio;
     
-    set v_orden = 1;
+    set v_orden_Max = (select max(orden) from bd_sample.tbl_facturas_selectas);
     
-    
-    while v_fecha_inicio >= v_fecha_final  do
-		set v_fecha_inicio = i;
-              
+    while v_orden < v_orden_Max do
+		set v_orden = v_orden + 1;
+        
 		select fecha_emision into v_fecha_inicio
 		from bd_sample.tbl_facturas_selectas where orden = v_orden;
               
 		select id_factura into v_id_factura 
         from bd_sample.tbl_facturas_selectas where orden = v_orden;
         
-        set v_Randomizer = select ceil( RAND()*(10000-0)+10000 );
+        set v_Randomizer = (select ceil( RAND()*(10000-0)+10000 ));
         
         insert into bd_sample.tbl_tickets_promo (
 			idticket, idfactura, numero_random, fecha_creacion
         )values(
 			v_orden, v_id_factura, v_Randomizer, v_fecha_inicio
         );
-        
-        
-        set i = (select fecha_emision from bd_sample.tbl_facturas_selectas where fecha_emsion > v_fecha_inicio and orden = v_orden);
-        set v_orden = v_orden + 1;
 	end while;
-    
     select * from bd_sample.tbl_tickets_promo;
 End;
