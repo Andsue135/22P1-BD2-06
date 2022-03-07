@@ -37,7 +37,6 @@ Create Procedure SP_Registro_Tickets(
 )
 Begin
 	declare i datetime;
-    declare j int;
     
 	declare v_id_ticket int default 0;
     declare v_id_factura int;
@@ -48,22 +47,31 @@ Begin
     
     set v_fecha_inicio = p_fecha_incio;
     set v_fecha_final = now();
-    set v_Randomizer = select ceil( RAND()*(10000-0)+10000 );
+    
     set v_orden = 1;
     
     
     while v_fecha_inicio >= v_fecha_final  do
-		
-        set v_fecha_inicio = i;
+		set v_fecha_inicio = i;
+              
+		select fecha_emision into v_fecha_inicio
+		from bd_sample.tbl_facturas_selectas where orden = v_orden;
+              
+		select id_factura into v_id_factura 
+        from bd_sample.tbl_facturas_selectas where orden = v_orden;
         
+        set v_Randomizer = select ceil( RAND()*(10000-0)+10000 );
         
-        select id_factura into v_id_factura 
-        from bd_sample.tbl_facturas_selectas where fecha_emision >= v_fecha_inicio;
-        
+        insert into bd_sample.tbl_tickets_promo (
+			idticket, idfactura, numero_random, fecha_creacion
+        )values(
+			v_orden, v_id_factura, v_Randomizer, v_fecha_inicio
+        );
         
         
         set i = (select fecha_emision from bd_sample.tbl_facturas_selectas where fecha_emsion > v_fecha_inicio and orden = v_orden);
         set v_orden = v_orden + 1;
 	end while;
+    
     select * from bd_sample.tbl_tickets_promo;
 End;
