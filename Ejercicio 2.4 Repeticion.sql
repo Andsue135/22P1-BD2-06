@@ -63,6 +63,7 @@ Begin
         )values(
 			v_orden, v_id_factura, v_Randomizer, v_fecha_inicio
         );
+
 	end while;
     select * from bd_sample.tbl_tickets_promo;
 End;
