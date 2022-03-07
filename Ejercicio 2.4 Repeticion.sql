@@ -41,9 +41,25 @@ Begin
     declare v_id_factura int;
     declare v_Randomizer int;
     declare v_fecha_inicio datetime;
+    declare v_fecha_final datetime;
     
     set v_fecha_inicio = p_fecha_incio;
+    set v_fecha_final = now();
     set v_Randomizer = select ceil( RAND()*(10000-0)+10000 );
     
-    select id_factura into v_id_factura from bd_sample.tbl_facturas_selectas where fecha_emision >= v_fecha_inicio;
+    
+    
+    while v_fecha_final >= v_fecha_inicio do
+		set i= i+1;
+        select fecha_emision into v_fecha_inicio
+        from bd_sample.tbl_facturas_selectas where 
+        
+        select id_factura into v_id_factura 
+        from bd_sample.tbl_facturas_selectas where fecha_emision >= v_fecha_inicio;
+        
+        
+        
+        
+	end while;
+    select * from bd_sample.tbl_tickets_promo;
 End;
