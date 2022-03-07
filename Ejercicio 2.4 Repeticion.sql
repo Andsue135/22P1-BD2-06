@@ -28,8 +28,22 @@ BEGIN
 	end while;
         
 	select Cadena;
-    
-    
+        
 END;
 
-call SP_Crear_Cadena();
+Drop Procedure if Exists SP_Registro_Tickets;
+Create Procedure SP_Registro_Tickets(
+	in p_fecha_inicio datetime
+)
+Begin
+	declare i int default 0;
+	declare v_id_ticket int default 0;
+    declare v_id_factura int;
+    declare v_Randomizer int;
+    declare v_fecha_inicio datetime;
+    
+    set v_fecha_inicio = p_fecha_incio;
+    set v_Randomizer = select ceil( RAND()*(10000-0)+10000 );
+    
+    select id_factura into v_id_factura from bd_sample.tbl_facturas_selectas where fecha_emision >= v_fecha_inicio;
+End;
