@@ -23,7 +23,7 @@ BEGIN
         select id_subscriptor into v_id_subscriptor
         from bd_sample.tbl_facturas where id_factura = i;
         
-        set Cadena = concat(Cadena,v_id_factura,", ",v_fecha_emision,", ",v_id_subscriptor, "// ");
+        set Cadena = concat(Cadena, "[",v_id_factura,", ",v_fecha_emision,", ",v_id_subscriptor, "] ");
         
 	end while;
         
