@@ -18,7 +18,7 @@ BEGIN
     select valor_procentual into v_valor from bd_platvideo.tbl_tarifas where id_tarifa = v_id_tarifa order by ABS(valor_procentual-v_valor) LIMIT 1;
     
     else
-    select valor_real into v_valor from bd_platvideo.tbl_tarifas where id_tarifa = v_id_tarifa;
+    select valor_real, valor_procentual from bd_platvideo.tbl_tarifas where id_tarifa = v_id_tarifa;
     end if;
     
     return v_valor;
