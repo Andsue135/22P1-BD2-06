@@ -28,4 +28,4 @@ BEGIN
 END //
 DELIMITER ;
 
-select bd_platvideo.Valor_Tarifas(3,25) from bd_platvideo.tbl_tarifas;
+select bd_platvideo.Valor_Tarifas(3,20) from bd_platvideo.tbl_tarifas;
