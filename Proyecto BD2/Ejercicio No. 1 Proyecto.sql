@@ -13,19 +13,47 @@ BEGIN
       
     set v_id_tarifa = id_tarifa;
     set VN = valor_numero;
-    
-    if VN > 1 and VN <= 15.00 then
-		set v_valorA = (select valor_real from bd_platvideo.tbl_tarifas where id_tarifa = v_id_tarifa order by ABS(valor_real -v_valor));
-		return v_valorA;
-    elseif VN < 1 then
-		set v_valorB = (select valor_procentual from bd_platvideo.tbl_tarifas where id_tarifa = v_id_tarifa order by ABS(valor_procentual -v_valor));
-		return v_valorB;
-    else
-		set v_valor = VN;
-		return v_valor;
-    end if;
-    
+   
+    case
+		when id_tarifa = 1 then
+			if VN > 12.51 and VN <= 15.00 then
+            set v_valorA = (select valor_real from bd_platvideo.tbl_tarifas where id_tarifa = 1 LIMIT 1);
+			return v_valorA;
+            elseif VN > 0.1251 and VN <= 0.15 then
+			set v_valorB = (select valor_procentual from bd_platvideo.tbl_tarifas where id_tarifa = 1 LIMIT 1);
+			return v_valorB;
+            
+            end if;
+		when id_tarifa = 2 then
+			if VN > 1 and VN <= 10.00 then
+            set v_valorA = (select valor_real from bd_platvideo.tbl_tarifas where id_tarifa = 2 LIMIT 1);
+			return v_valorA;
+            elseif VN <= 0.1 then
+			set v_valorB = (select valor_procentual from bd_platvideo.tbl_tarifas where id_tarifa = 2 LIMIT 1);
+			return v_valorB;
+           
+            end if;
+		when id_tarifa = 3 then
+			if VN > 22.51 and VN <= 25.00 then
+            set v_valorA = (select valor_real from bd_platvideo.tbl_tarifas where id_tarifa = 3 LIMIT 1);
+			return v_valorA;
+            elseif VN <= 0.25 and VN > 0.2251 then
+			set v_valorB = (select valor_procentual from bd_platvideo.tbl_tarifas where id_tarifa = 3 LIMIT 1);
+			return v_valorB;
+            
+            end if;
+		when id_tarifa = 4 then
+			if VN > 17.51 and VN <= 20.00 then
+            set v_valorA = (select valor_real from bd_platvideo.tbl_tarifas where id_tarifa = 4 LIMIT 1);
+			return v_valorA;
+            elseif VN <= 0.20 and VN >= 0.1751 then
+			set v_valorB = (select valor_procentual from bd_platvideo.tbl_tarifas where id_tarifa = 4 LIMIT 1);
+			return v_valorB;
+            end if;
+		end case;
+        
 END //
 DELIMITER ;
 
-select bd_platvideo.Valor_Tarifas(3,20) from bd_platvideo.tbl_tarifas;
+
+select bd_platvideo.Valor_Tarifas(1,0.13) from bd_platvideo.tbl_tarifas;
