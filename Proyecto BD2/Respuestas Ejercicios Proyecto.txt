@@ -67,7 +67,8 @@ Drop Procedure if exists SP_Generar_Facturas;
 Delimiter //
 Create Procedure SP_Generar_Facturas(
 	in p_id_suscriptor int,
-    in p_id_cat int
+    in p_id_cat int,
+    in p_id_cargo int
 )
 Begin
     declare v_costo_catalogo decimal(12,2);
@@ -89,6 +90,7 @@ Begin
     set v_fecha_final = (select date_add(v_fecha_inicio, INTERVAL 20 DAY));
 	set v_id_suscriptor = p_id_suscriptor;
     set v_id_cat = p_id_cat;
+    set v_id_cargo = p_id_cargo;
     
     set v_cantidad = (select count(Tbl1.iid_cat) from bd_platvideo.tbl_cat_prods Tbl1 left join bd_platvideo.tbl_catalogo Tbl2 on Tbl2.id_cat = Tbl1.iid_cat where id_cat = v_id_cat);
     set v_costo_catalogo = (select sum(Tbl2.precio_venta) from bd_platvideo.tbl_cat_prods Tbl1 left join bd_platvideo.tbl_catalogo Tbl2 on Tbl2.id_cat = Tbl1.iid_cat where id_cat = v_id_cat);
@@ -113,13 +115,13 @@ Begin
 	insert into bd_platvideo.tbl_cartera (
         id_orden, id_cat, id_suscriptor, fecha_ingreso, fecha_pago
 	) values(
-        v_id_orden, v_id_cat, v_id_suscriptor, v_fecha_inicio, v_fecha_final 
+        v_id_orden + 1, v_id_cat, v_id_suscriptor, v_fecha_inicio, v_fecha_final 
 	);
     
     insert into bd_platvideo.tbl_fact_detalle (
         id_factura, id_cargo, cantidad, monto, subtotal, isv, total_cargo, fecha_ingreso
 	) values(
-        v_id_factura, v_id_cargo, v_cantidad, v_monto, v_isv, v_total, v_fecha_inicio
+        v_id_factura +1, v_id_cargo, v_cantidad, v_monto, v_isv, v_total, v_fecha_inicio
 	);
     commit;
 	
