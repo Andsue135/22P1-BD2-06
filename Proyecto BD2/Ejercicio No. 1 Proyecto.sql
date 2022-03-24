@@ -56,4 +56,4 @@ END //
 DELIMITER ;
 
 
-select bd_platvideo.Valor_Tarifas(1,0.13) from bd_platvideo.tbl_tarifas;
+select bd_platvideo.Valor_Tarifas(3,0.23694) from bd_platvideo.tbl_tarifas;

@@ -1,0 +1,26 @@
+set v_valor = valor_numero;
+
+set v_valorA = (select valor_real into v_valor from bd_platvideo.tbl_tarifas where id_tarifa = v_id_tarifa order by ABS(valor_real-v_valor) LIMIT 1);
+set v_valorB = (select valor_procentual into v_valor from bd_platvideo.tbl_tarifas where id_tarifa = v_id_tarifa order by ABS(valor_procentual-v_valor) LIMIT 1);
+
+select valor_real, valor_procentual from bd_platvideo.tbl_tarifas where id_tarifa = v_id_tarifa;   
+
+set v_valor = VN; 
+ return v_id_tarifa;
+ 
+    if VN > 1 and VN <= 15.00 then
+		select valor_real into v_valorA from bd_platvideo.tbl_tarifas where v_id_tarifa = id_tarifa;
+		return v_valorA;
+    elseif VN < 1 then
+		select valor_procentual into v_valorB from bd_platvideo.tbl_tarifas where v_id_tarifa = id_tarifa;
+		return v_valorB;
+    else
+		set v_valor = VN;
+		return v_valor;
+    end if;
+     LIMIT 1
+
+		return v_valor;
+
+
+when convert(datetime(datepart(dd, getdate())+20 <= 5
